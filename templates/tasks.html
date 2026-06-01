@@ -1,0 +1,37 @@
+<h1>Список задач</h1>
+
+<form action={{ url_for("add_task") }} method="post">
+    <input type="text" name="text" placeholder="Новая задача">
+    <button type="submit">Создать задачу</button>
+</form>
+
+<ul>
+{% for task in tasks %}
+    <li>
+        <form action={{ url_for("change_task_status", task_id=loop.index0) }} method="post" style="display: inline">
+            <input
+                type="checkbox"
+                name="done"
+                onChange="this.form.submit()"
+                {% if task.done %}
+                    checked
+                {% endif %}>
+        </form>
+
+        {% if task.done %}
+            <s>{{ task.text }}</s>
+        {% else %}
+            {{ task.text }}
+        {% endif %}
+
+        <form action={{ url_for("delete_task", task_id=loop.index0) }} method="post" style="display: inline">
+            <button
+                style="display: inline"
+                type="submit"
+                name="idx"
+                value={{ loop.index0 }}
+            >🗑️</button>
+        </form>
+    </li>
+{% endfor %}
+</ul>
